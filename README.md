@@ -33,7 +33,7 @@ git clone -b correct_chain_model_and_gazebo_enabled https://github.com/awesomeby
 git clone -b simulation_that_works https://github.com/awesomebytes/pepper_virtual
 git clone https://github.com/awesomebytes/gazebo_model_velocity_plugin
 # In case you are missing any of these
-sudo apt-get install ros-kinetic-tf2-sensor-msgs ros-kinetic-ros-control ros-kinetic-ros-controllers ros-kinetic-gazebo-ros ros-kinetic-gazebo-ros-control ros-kinetic-gazebo-plugins ros-kinetic-controller-manager 
+sudo apt-get install ros-kinetic-tf2-sensor-msgs ros-kinetic-ros-control ros-kinetic-ros-controllers ros-kinetic-gazebo-ros ros-kinetic-gazebo-ros-control ros-kinetic-gazebo-plugins ros-kinetic-controller-manager ros-kinetic-ddynamic-reconfigure-python
 cd ..
 catkin_make
 source devel/setup.bash
