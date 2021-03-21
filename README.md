@@ -25,6 +25,7 @@ And further variants that don't have the arms of the robot which reduce CPU load
 - `roslaunch pepper_gazebo_plugin pepper_gazebo_plugin_in_office_CPU_no_arms.launch`
 
 
+# Installation
 This should get your workspace up and running:
 ```bash
 mkdir -p pepper_sim_ws/src
@@ -44,6 +45,28 @@ roslaunch pepper_gazebo_plugin pepper_gazebo_plugin_in_office_CPU.launch
 rosrun rviz rviz -d `rospack find pepper_gazebo_plugin`/config/pepper_sensors.rviz
 ```
 
+
+## Docker
+We provide a docker image which is plattform independent and containerized, meaning it can't interfere with any local ROS installations or other incompatible packages you might have. You have two options to obtain the image:
++ Build it locally, from the provided dockerfile: `sudo docker build -t awesome-pepper-sim .` 
++ Pull it from dockerhub: `sudo docker pull frietz58/pepper-virtual:with-gazebo-files`
+
+Pulling it from dockerhub comes with the advantage of having the commited gazebo files, which otherwise have to be loaded when gazebo is started in the container. This happens automatically but takes about 30 seconds. Note that docker, per default, does not have permissions to spawn GUIs on the host system from within the container. There are a few options to address this (more about this described in [this fork](https://github.com/frietz58/pepper_virtual)), but we recommend installing the docker extension "rocker" to take care of this. Then, launch the container, depending on which option you chose earlier:
++ If build locally: `sudo rocker --nvidia --x11 awesome-pepper-sim`
++ If pulled from dockerhub: `sudo rocker --nvidia --x11 frietz58/pepper-virtual:with-gazebo-files`
+
+Then, just as above but in the container, do:
+```
+# Launch your preferred simulation here
+roslaunch pepper_gazebo_plugin pepper_gazebo_plugin_in_office_CPU.launch
+```
+In order to start a new shell in the container and, for example open RVIZ, run:
+```
+# First, find container ID with: sudo docker ps, then
+sudo docker exec -it <CONTAINER-ID> bash
+# Launch RVIZ in the second shell in the container:
+rosrun rviz rviz -d `rospack find pepper_gazebo_plugin`/config/pepper_sensors.rviz
+```
 ![screenshot of Pepper in Gazebo](gazebo_screenshot.png)
 
 
