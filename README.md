@@ -63,7 +63,7 @@ roslaunch pepper_gazebo_plugin pepper_gazebo_plugin_in_office_CPU.launch
 In order to start a new shell in the container and, for example open RVIZ, run:
 ```
 # First, find container ID with: sudo docker ps, then
-sudo docker exec -it <CONTAINER-ID> bash
+docker exec -it <CONTAINER-ID> bash
 # Launch RVIZ in the second shell in the container:
 rosrun rviz rviz -d `rospack find pepper_gazebo_plugin`/config/pepper_sensors.rviz
 ```
