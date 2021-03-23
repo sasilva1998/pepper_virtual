@@ -48,12 +48,12 @@ rosrun rviz rviz -d `rospack find pepper_gazebo_plugin`/config/pepper_sensors.rv
 
 ## Docker
 We provide a docker image which is plattform independent and containerized, meaning it can't interfere with any local ROS installations or other incompatible packages you might have. You have two options to obtain the image:
-+ Build it locally, from the provided dockerfile: `sudo docker build -t awesome-pepper-sim .` 
-+ Pull it from dockerhub: `sudo docker pull frietz58/pepper-virtual:with-gazebo-files`
++ Build it locally, from the provided dockerfile: `docker build -t awesome-pepper-sim .` 
++ Pull it from dockerhub: `docker pull frietz58/pepper-virtual:with-gazebo-files`
 
 Pulling it from dockerhub comes with the advantage of having the commited gazebo files, which otherwise have to be loaded when gazebo is started in the container. This happens automatically but takes about 30 seconds. Note that docker, per default, does not have permissions to spawn GUIs on the host system from within the container. There are a few options to address this (more about this described in [this fork](https://github.com/frietz58/pepper_virtual)), but we recommend installing the docker extension "rocker" to take care of this. Then, launch the container, depending on which option you chose earlier:
-+ If build locally: `sudo rocker --nvidia --x11 awesome-pepper-sim`
-+ If pulled from dockerhub: `sudo rocker --nvidia --x11 frietz58/pepper-virtual:with-gazebo-files`
++ If build locally: `rocker --nvidia --x11 awesome-pepper-sim`
++ If pulled from dockerhub: `rocker --nvidia --x11 frietz58/pepper-virtual:with-gazebo-files`
 
 Then, just as above but in the container, do:
 ```
