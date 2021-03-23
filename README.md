@@ -55,6 +55,8 @@ Pulling it from dockerhub comes with the advantage of having the commited gazebo
 + If build locally: `rocker --nvidia --x11 awesome-pepper-sim`
 + If pulled from dockerhub: `rocker --nvidia --x11 frietz58/pepper-virtual:with-gazebo-files`
 
+Alternatively, you can use the `start_docker.sh` script which will setup a lot of docker flags to enable the utilization of your Nvidia GPU and your X graphical system.
+
 Then, just as above but in the container, do:
 ```
 # Launch your preferred simulation here
