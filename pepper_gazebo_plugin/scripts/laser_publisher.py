@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 from math import atan2, cos, radians, sin, sqrt, degrees, isnan
 
 import rospy
@@ -232,7 +232,7 @@ class LaserProjection:
                     p[1], 2)) + ", z: " + str(round(p[2], 2)) + " = " + str(round(dist, 2)) + "m (at " + str(round(degrees(idx * angle_increment + min_angle), 2)) + "deg)\n"
 
         rospy.loginfo("Projected cloud:")
-        rospy.loginfo(big_str)
+        # rospy.loginfo(big_str)
         cloud_out = pc2.create_cloud(scan_in.header, fields, points)
 
         return cloud_out
@@ -381,6 +381,8 @@ class LaserPublisher(object):
 
         # Convert combined point cloud into LaserScan
         all_laser_msg = LaserScan()
+        print("POINTCLOUDsss")
+        print(point_cloud)
         laser_ranges, angle_min, angle_max, angle_increment = self.pc_to_laser(
             point_cloud)
         all_laser_msg.header.frame_id = 'base_footprint'
@@ -394,16 +396,19 @@ class LaserPublisher(object):
         all_laser_msg.intensities = []
         self.all_laser_pub.publish(all_laser_msg)
 
-        rospy.logdebug("all_laser_msg len: " + str(len(all_laser_msg.ranges)))
+        debug_list = [value for value in laser_ranges if str(value) != 'nan']
+        print(len(debug_list))
+
+        # rospy.logdebug("all_laser_msg len: " + str(len(all_laser_msg.ranges)))
         pc_redone = self.lp.projectLaser(all_laser_msg, channel_options=0x00)
-        rospy.logdebug("all_laser pc_redone len: " + str(pc_redone.width))
+        # rospy.logdebug("all_laser pc_redone len: " + str(pc_redone.width))
         self.pc_redone_pub.publish(pc_redone)
 
         # compare what came in and what came out
-        rospy.logdebug("point_cloud frame_id, pc_redone frame_id:")
-        rospy.logdebug((point_cloud.header.frame_id,
-                        pc_redone.header.frame_id))
-        rospy.logdebug("point_cloud is correct, pc_redone is incorrect")
+        # rospy.logdebug("point_cloud frame_id, pc_redone frame_id:")
+        # rospy.logdebug((point_cloud.header.frame_id,
+                        # pc_redone.header.frame_id))
+        # rospy.logdebug("point_cloud is correct, pc_redone is incorrect")
         compare_str = "\n"
         for idx, (point_in, point_out) in enumerate(zip(read_points(point_cloud), read_points(pc_redone))):
             point_out = [point_out[0], point_out[1], 0.0]
@@ -445,13 +450,14 @@ class LaserPublisher(object):
             # coords from dist
             x = dist * cos(idx * angle_increment + min_angle)
             y = dist * sin(idx * angle_increment + min_angle)
-            print(" [ px, py, are the correct points ] ")
-            print("dist, px, py: " + str(dist) +
-                  " " + str(p[0])) + " " + str(p[1])
-            print("dist, x, y:   " + str(dist) + " " + str(x) + " " + str(y))
+            # print(" [ px, py, are the correct points ] ")
+            # print("dist:", dist)
+            # print("p:", p)
+            # print("dist, px, py: " + str(dist) + " " + str(p[0]) + " " + str(p[1]))
+            # print("dist, x, y:   " + str(dist) + " " + str(x) + " " + str(y))
 
             dist_from_rereproj = self.get_dist(x, y)
-            print("dist rereproj: " + str(dist_from_rereproj))
+            # print("dist rereproj: " + str(dist_from_rereproj))
             # print("dist1       : " + str(dist1))
 
             # what if a make a pointcloud based in the cos sin version
@@ -459,14 +465,15 @@ class LaserPublisher(object):
 
             # angle from point
             angle = atan2(p[1], p[0])
+            print("pppp:", p)
             # angle2 = atan2(y, x)
             expected_angle = idx * self.angle_increment + min_angle
             if not isnan(angle):
                 tmp_angle = angle - min_angle
-                print("tmp_angle: " + str(degrees(tmp_angle))) + " deg"
-                print("angle_increment: " + str(degrees(angle_increment)))
+                # print("tmp_angle: " + str(degrees(tmp_angle)) + " deg")
+                # print("angle_increment: " + str(degrees(angle_increment)))
                 closest_index = int(tmp_angle / angle_increment)
-                print("closest index: " + str(closest_index))
+                # print("closest index: " + str(closest_index))
                 if closest_index >= len(laser_points2):
                     laser_points2[-1] = dist
                 elif closest_index < 0:
@@ -477,9 +484,9 @@ class LaserPublisher(object):
                 print("nan, not adding anything to scan")
 
             # laser_points[]
-            print("Angle from p : " + str(round(degrees(angle), 2)))
+            # print("Angle from p : " + str(round(degrees(angle), 2)))
             # print("Angle from xy: " + str(round(degrees(angle2), 2)))
-            print("Expected angle: " + str(round(degrees(expected_angle), 2)))
+            # print("Expected angle: " + str(round(degrees(expected_angle), 2)))
 
         rospy.logdebug("Lasered cloud")
         rospy.logdebug(big_str)
